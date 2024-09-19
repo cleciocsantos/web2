@@ -3,4 +3,4 @@ CREATE TABLE usuario(
     nome text NOT NULL,
     email text NOT NULL UNIQUE,
     senha text NOT NULL
-);gi
+);
