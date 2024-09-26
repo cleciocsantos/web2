@@ -43,7 +43,7 @@ http.createServer(function (req, res) {
         if (err) {
           return console.log(err.message);
         }
-        // get the last insert id
+        // Pega o id do último registro inserido
         console.log(`Registro feito com sucesso no id ${this.lastID}`);
       });
     
@@ -54,8 +54,52 @@ http.createServer(function (req, res) {
         console.log('Fechou a conexão com o banco de dados!');
       });
       res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write("<p>Registro efetuado com sucesso!<p>");
+      res.write("<p>Registro efetuado com sucesso!</p>");
+      res.write("<p><a href='/'>Voltar</a></p>");
       return res.end();
+    }
+    else if(nomearquivo == "./ver_usuarios"){
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.write("<html><head><meta charset='UTF-8'><title>Usuários</title></head><body>");
+      res.write("<h1>Usuários Cadastrados</h1>");
+
+      let db = new sqlite3.Database('./db/banco.db', (err) => {
+        if (err) {
+          return console.error(err.message);
+        }
+        console.log('Conectou com o banco de dados!');
+      });
+
+       db.all(`SELECT * FROM usuario`, [], (err, rows) => {
+        if (err) {
+          return console.error(err.message);
+        }
+
+        res.write("<table border='1'>");
+        res.write("<tr>");
+        res.write("<th>Nome</th>");
+        res.write("<th>E-mail</th>");
+        res.write("<th>Senha</th>");
+        res.write("</tr>");
+        rows.forEach((row) => {
+          res.write("<tr>");
+          res.write("<td>"+row.nome+"</td>");
+          res.write("<td>"+row.email+"</td>");
+          res.write("<td>"+row.senha+"</td>");
+          res.write("</tr>");
+        });
+        res.write("</table>");
+        res.write("<p><a href='/'>Voltar</a></p>");
+        res.write("</body></html>");
+        return res.end();
+      });
+
+      db.close((err) => {
+        if (err) {
+          return console.error(err.message);
+        }
+        console.log('Fechou a conexão com o banco de dados!');
+      });
     }
 }).listen(8080, () => {
     console.log("O servidor foi iniciado na porta 8080");
