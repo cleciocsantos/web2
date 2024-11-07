@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários Cadastrados</title>
+</head>
+<body>
+    <h1>Usuários Cadastrados</h1>
+    <div id="tabela"></div>
+    <script>
+        async function carregar_usuarios() {
+            try{
+                const response = await fetch('./buscar-usuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                
+                document.getElementById('tabela').innerHTML = result.message;
+                var dados = "<table border='1'>";
+                dados += "<tr><th>Nome</th><th>E-mail</th><th>Senha</th></tr>";
+                result.usuarios.forEach((row) => {
+                    dados+="<tr>";
+                    dados+="<td>"+row.nome+"</td>";
+                    dados+="<td>"+row.email+"</td>";
+                    dados+="<td>"+row.senha+"</td>";
+                    dados+="</tr>";
+                });
+                dados += "</table>";
+                document.getElementById('tabela').innerHTML += dados;
+            } catch (error){
+                console.log('Error: ', error);
+            }
+        };
+        carregar_usuarios();
+    </script>
+</body>
+</html>
