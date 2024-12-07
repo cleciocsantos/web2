@@ -41,12 +41,12 @@
                 
                 document.getElementById('tabela').innerHTML = result.message;
                 var dados = "<table border='1'>";
-                dados += "<tr><th>Nome</th><th>E-mail</th><th>Senha</th></tr>";
+                dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
                 result.usuarios.forEach((row) => {
                     dados+="<tr>";
                     dados+="<td>"+row.nome+"</td>";
                     dados+="<td>"+row.email+"</td>";
-                    dados+="<td>"+row.senha+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
                     dados+="</tr>";
                 });
                 dados += "</table>";
@@ -74,12 +74,12 @@
                 
                 document.getElementById('tabela').innerHTML = result.message;
                 var dados = "<table border='1'>";
-                dados += "<tr><th>Nome</th><th>E-mail</th><th>Senha</th></tr>";
+                dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
                 result.usuarios.forEach((row) => {
                     dados+="<tr>";
                     dados+="<td>"+row.nome+"</td>";
                     dados+="<td>"+row.email+"</td>";
-                    dados+="<td>"+row.senha+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
                     dados+="</tr>";
                 });
                 dados += "</table>";
@@ -88,6 +88,9 @@
                 console.log('Error: ', error);
             }
         };
+        function editar(id){
+            window.location.href = "editar.html?id="+id;
+        }
     </script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

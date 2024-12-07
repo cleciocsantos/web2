@@ -79,39 +79,6 @@ app.post('/registra-usuario', (req, res) => {
       });
   }
 });
-
-    
-    /*else if(nomearquivo == "./registra"){
-      let nome = q.query.nome;
-      let email = q.query.email;
-      let senha = q.query.senha;
-      let db = new sqlite3.Database('./db/banco.db', (err) => {
-        if (err) {
-          return console.error(err.message);
-        }
-        console.log('Conectou com o banco de dados!');
-      });
-    
-      // insere um registro no banco de dados
-      db.run(`INSERT INTO usuario(nome, email, senha) VALUES(?,?,?)`, [nome,email,senha], function(err) {
-        if (err) {
-          return console.log(err.message);
-        }
-        // Pega o id do último registro inserido
-        console.log(`Registro feito com sucesso no id ${this.lastID}`);
-      });
-    
-      db.close((err) => {
-        if (err) {
-          return console.error(err.message);
-        }
-        console.log('Fechou a conexão com o banco de dados!');
-      });
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write("<p>Registro efetuado com sucesso!</p>");
-      res.write("<p><a href='/'>Voltar</a></p>");
-      return res.end();
-    } */
     
 app.get('/ver_usuarios', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','consulta_usuarios.html' ));
