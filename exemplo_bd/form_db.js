@@ -141,6 +141,36 @@ app.post('/procurar', (req, res) => {
   });
 });
 
+app.post('/procurarId', (req, res) => {
+  const {id} = req.body;
+  let db = new sqlite3.Database('./db/banco.db', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Conectou com o banco de dados!');
+  });
+
+  db.get(`SELECT * FROM usuario WHERE id_usuario = ?`, [id], (err, row) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    
+    return res.status(200).json({
+      status: 'success',
+      message: 'Dados buscados com sucesso!',
+      nome: row.nome,
+      email: row.email
+    });
+  });
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Fechou a conexão com o banco de dados!');
+  });
+});
+
 app.listen(8080, () => {
   console.log('Servidor iniciado na porta 8080');
 });

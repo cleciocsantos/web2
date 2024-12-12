@@ -33,14 +33,6 @@
             <label for="email">E-mail:</label>
             <input type="text" id="email" name="email">
         </p>
-        <p>
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha">
-        </p>
-        <p>
-            <label for="conf_senha">Confirmação de senha:</label>
-            <input type="password" id="conf_senha" name="conf_senha">
-        </p>
         
         <input type="submit" value="Enviar">
     </form>
@@ -52,6 +44,28 @@
         var chave = chaveValor[0];
         var valor = chaveValor[1];
         console.log(chave+" "+valor);
+
+        async function buscaUsuario(id) {
+            const formData = {
+                id: id
+            };
+            try{
+                const response = await fetch('./procurarId', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                document.getElementById("nome").value = result.nome;
+                document.getElementById("email").value = result.email;
+            } catch (error){
+                console.log('Error: ', error);
+            }
+        };
+        buscaUsuario(valor);
     </script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
