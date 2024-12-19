@@ -79,6 +79,66 @@ app.post('/registra-usuario', (req, res) => {
       });
   }
 });
+
+app.post('/edita-usuario', (req, res) => {
+  const {nome, email, id} = req.body;
+  // Aqui começa a validação dos campos do formulário
+  let erro = "";
+  if(nome.length < 1 || email.length < 1){
+      erro += 'Por favor, preencha todos os campos corretamente!<br>';
+  }
+  if(erro){
+      res.status(200).json({
+          status: 'failed',
+          message: erro,
+      });
+  }
+  else{
+      // aqui começa o código para inserir o registro no banco de dados
+      let db = new sqlite3.Database('./db/banco.db', (err) => {
+          if (err) {
+              return console.error(err.message);
+          }
+              console.log('Conectou no banco de dados!');
+      });
+
+      db.get('SELECT * FROM usuario WHERE email = ?', [email], async (error, result) => {
+        if(error){
+              console.log(error)
+          }
+          else if(result && result.id_usuario != id) {
+              db.close((err) => {
+                  if (err) {
+                  return console.error(err.message);
+                  }
+                  console.log('Fechou a conexão com o banco de dados.');
+              });
+              return res.status(200).json({
+                  status: 'failed',
+                  message: 'Este e-mail já está em uso!',
+              });
+          } else{
+              db.run('UPDATE usuario SET nome = ?, email = ? WHERE id_usuario = ?', [nome, email, id], (error2) => {
+                  if(error2) {
+                      console.log(error2)
+                  } else {
+                      db.close((err) => {
+                          if (err) {
+                          return console.error(err.message);
+                          }
+                          console.log('Fechou a conexão com o banco de dados.');
+                      });
+                      return res.status(200).json({
+                          status: 'success',
+                          message: 'Atualização feita com sucesso!',
+                          campos: req.body
+                      });
+                  }
+              });
+          }
+      });
+  }
+});
     
 app.get('/ver_usuarios', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','consulta_usuarios.html' ));
