@@ -231,6 +231,34 @@ app.post('/procurarId', (req, res) => {
   });
 });
 
+app.post('/excluir_usuario', (req, res) => {
+  const {id} = req.body;
+  let db = new sqlite3.Database('./db/banco.db', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Conectou com o banco de dados!');
+  });
+
+  db.run(`DELETE FROM usuario WHERE id_usuario = ?`, [id], (err, row) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    
+    return res.status(200).json({
+      status: 'success',
+      message: 'Usuário excluído com sucesso!'
+    });
+  });
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Fechou a conexão com o banco de dados!');
+  });
+});
+
 app.listen(8080, () => {
   console.log('Servidor iniciado na porta 8080');
 });
